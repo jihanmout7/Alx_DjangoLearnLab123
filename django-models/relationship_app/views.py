@@ -8,6 +8,29 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import user_passes_test
 
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.views.generic import TemplateView
+
+# Admin view accessible only by users with 'Admin' role
+class AdminView(UserPassesTestMixin, TemplateView):
+    template_name = 'admin_view.html'
+
+    def test_func(self):
+        return self.request.user.profile.role == 'Admin'
+
+# Librarian view accessible only by users with 'Librarian' role
+class LibrarianView(UserPassesTestMixin, TemplateView):
+    template_name = 'librarian_view.html'
+
+    def test_func(self):
+        return self.request.user.profile.role == 'Librarian'
+
+# Member view accessible only by users with 'Member' role
+class MemberView(UserPassesTestMixin, TemplateView):
+    template_name = 'member_view.html'
+
+    def test_func(self):
+        return self.request.user.profile.role == 'Member'
 
 # Admin view
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
