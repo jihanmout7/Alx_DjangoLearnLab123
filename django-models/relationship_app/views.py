@@ -8,26 +8,27 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import TemplateView
 
-# Admin view accessible only by users with 'Admin' role
-class AdminView(UserPassesTestMixin, TemplateView):
-    template_name = 'admin_view.html'
+from django.shortcuts import render
+from .models import Library, Book
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import user_passes_test
 
-    def test_func(self):
-        return self.request.user.profile.role == 'Admin'
+# Admin view - Accessible only by users with 'Admin' role
+@user_passes_test(lambda u: u.userprofile.role == 'Admin')
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
 
-# Librarian view accessible only by users with 'Librarian' role
-class LibrarianView(UserPassesTestMixin, TemplateView):
-    template_name = 'librarian_view.html'
+# Librarian view - Accessible only by users with 'Librarian' role
+@user_passes_test(lambda u: u.userprofile.role == 'Librarian')
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
 
-    def test_func(self):
-        return self.request.user.profile.role == 'Librarian'
-
-# Member view accessible only by users with 'Member' role
-class MemberView(UserPassesTestMixin, TemplateView):
-    template_name = 'member_view.html'
-
-    def test_func(self):
-        return self.request.user.profile.role == 'Member'
+# Member view - Accessible only by users with 'Member' role
+@user_passes_test(lambda u: u.userprofile.role == 'Member')
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
 
 # Function-based view to list all books
 def list_books(request):
