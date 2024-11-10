@@ -7,6 +7,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import permission_required
+from django.shortcuts import render, get_object_or_404
 
 from django.shortcuts import render
 from .models import Library, Book
@@ -19,6 +21,34 @@ from django.contrib.auth.decorators import user_passes_test
 @user_passes_test(lambda u: u.userprofile.role == 'Admin')
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
+
+
+# Add a book
+@permission_required('relationship_app.can_add_book')
+def add_book(request):
+    if request.method == "POST":
+        title = request.POST['title']
+        author = request.POST['author']
+        Book.objects.create(title=title, author=author)
+        return redirect('list_books')
+    return render(request, 'add_book.html')
+
+# Edit a book
+@permission_required('relationship_app.can_change_book')
+def edit_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == "POST":
+        book.title = request.POST['title']
+        book.save()
+        return redirect('list_books')
+    return render(request, 'edit_book.html', {'book': book})
+
+# Delete a book
+@permission_required('relationship_app.can_delete_book')
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)
+    book.delete()
+    return redirect('list_books')
 
 # Librarian view - Accessible only by users with 'Librarian' role
 @user_passes_test(lambda u: u.userprofile.role == 'Librarian')
