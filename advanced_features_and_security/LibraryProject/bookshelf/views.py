@@ -25,8 +25,7 @@ def my_view(request):
         return HttpResponseForbidden("You do not have permission to perform this action")
 
 
-def book_list(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    # Now you can access the book's fields, such as title, author, etc.
-    context = {'book': book}
-    return render(request, 'book_detail.html', context)
+def list_books(request):
+    query = request.GET.get('genre', '')
+    books = Book.objects.exclude(genre=query)  # Safely exclude books of a particular genre
+    return render(request, 'book_list.html', {'books': books})

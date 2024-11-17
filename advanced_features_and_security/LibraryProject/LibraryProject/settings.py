@@ -10,7 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p6jnm8y&r2x_ih&0752^x&)zmui^@^)4vhw4tp(q+f!7$*o)sb'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -56,7 +58,7 @@ ROOT_URLCONF = 'LibraryProject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "Templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,3 +130,28 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # AUTH_USER_MODEL Configuration
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+
+# Enabling the XSS filter in modern browsers
+SECURE_BROWSER_XSS_FILTER = True
+
+# Prevent the site from being embedded in an iframe (helps protect against clickjacking)
+X_FRAME_OPTIONS = 'DENY'  # Or use 'SAMEORIGIN' if you want to allow embedding only from the same origin
+
+# Prevent browsers from sniffing the content type (helps prevent some attacks)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+CSRF_COOKIE_SECURE = True
+
+
+SESSION_COOKIE_SECURE = True
+
+CSP_DEFAULT_POLICY = {
+    'default-src': "'self'",
+    'script-src': "'self'",
+    'style-src': "'self' 'unsafe-inline'",  # Allow inline styles for custom CSS
+    'img-src': "'self'",
+    'font-src': "'self'",
+    'frame-ancestors': "'none'",
+}
