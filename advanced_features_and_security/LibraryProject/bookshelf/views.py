@@ -25,7 +25,7 @@ def my_view(request):
         return HttpResponseForbidden("You do not have permission to perform this action")
 
 
-def book_detail(request, book_id):
+def book_list(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     # Now you can access the book's fields, such as title, author, etc.
     context = {'book': book}
