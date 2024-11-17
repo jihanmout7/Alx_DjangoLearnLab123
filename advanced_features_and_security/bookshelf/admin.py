@@ -11,10 +11,6 @@ class BookAdmin(admin.ModelAdmin):
     list_filter = ('publication_year',)
     
 
-
-
-
-
 # Register your models here.
 @admin.register(CustomUser)
 class CustomUserAdmin(admin.ModelAdmin):
