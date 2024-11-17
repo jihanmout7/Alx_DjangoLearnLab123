@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from .models import Book
+from .forms import ExampleForm
 
 # Decorator ensures user has 'can_edit' permission before accessing the view
 @permission_required('bookshelf.can_edit', raise_exception=True)
