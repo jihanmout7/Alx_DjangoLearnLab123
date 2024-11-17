@@ -141,9 +141,11 @@ X_FRAME_OPTIONS = 'DENY'  # Or use 'SAMEORIGIN' if you want to allow embedding o
 # Prevent browsers from sniffing the content type (helps prevent some attacks)
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
+#CSRF_COOKIE_SECURE: Set to True to ensure CSRF cookies are only transmitted over HTTPS.
 
 CSRF_COOKIE_SECURE = True
 
+# SESSION_COOKIE_SECURE: Set to True to ensure session cookies are only transmitted over HTTPS.
 
 SESSION_COOKIE_SECURE = True
 
@@ -155,3 +157,6 @@ CSP_DEFAULT_POLICY = {
     'font-src': "'self'",
     'frame-ancestors': "'none'",
 }
+
+
+SECURE_SSL_REDIRECT = True
